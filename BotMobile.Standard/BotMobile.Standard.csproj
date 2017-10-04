@@ -2,6 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>BotMobile</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Prism.Core" Version="7.0.0-pre1" />
+    <PackageReference Include="Prism.Unity.Forms" Version="7.0.0-pre1" />
+    <PackageReference Include="Xamarin.Forms" Version="2.4.0.282" />
+  </ItemGroup>
 
 </Project>
