@@ -1,6 +1,9 @@
-﻿using Prism.Unity;
+﻿using Microsoft.Bot.Connector.DirectLine;
+using Prism.Unity;
 using BotMobile.Views;
+using BotMobile.Services;
 using Xamarin.Forms;
+using Microsoft.Practices.Unity;
 
 namespace BotMobile
 {
@@ -17,8 +20,9 @@ namespace BotMobile
 
         protected override void RegisterTypes()
         {
-            Container.RegisterTypeForNavigation<NavigationPage>();
-            Container.RegisterTypeForNavigation<MainPage>();
+            this.Container.RegisterTypeForNavigation<NavigationPage>();
+            this.Container.RegisterTypeForNavigation<MainPage>();
+            this.Container.RegisterType<IBotService, BotService>();
         }
     }
 }

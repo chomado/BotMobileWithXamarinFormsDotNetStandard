@@ -1,40 +1,59 @@
-﻿using Prism.Commands;
+﻿using System;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using BotMobile.Services;
+using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace BotMobile.ViewModels
 {
     public class MainPageViewModel : BindableBase, INavigationAware
     {
-        private string _title;
-        public string Title
+        private static PropertyChangedEventArgs CanSendMessagePropertyChangedEventArgs { get; } = new PropertyChangedEventArgs(nameof(CanSendMessage));
+        private IBotService BotService { get; }
+        private string conversationId;
+
+        public string ConversationId
         {
-            get { return _title; }
-            set { SetProperty(ref _title, value); }
+            get { return this.conversationId; }
+            set { this.SetProperty(ref this.conversationId, value); this.OnPropertyChanged(CanSendMessagePropertyChangedEventArgs); }
         }
 
-        public MainPageViewModel()
-        {
+        private string inputMessage;
 
+        public string InputMessage
+        {
+            get { return this.inputMessage; }
+            set { this.SetProperty(ref this.inputMessage, value); this.OnPropertyChanged(CanSendMessagePropertyChangedEventArgs); }
+        }
+
+        public bool CanSendMessage => !string.IsNullOrWhiteSpace(this.ConversationId) && !string.IsNullOrWhiteSpace(this.InputMessage);
+        public DelegateCommand SendMessageCommand { get; }
+        public MainPageViewModel(IBotService botService)
+        {
+            this.BotService = botService;
+            this.SendMessageCommand = new DelegateCommand(async () => await this.SendMessageExecuteAsync())
+                .ObservesCanExecute(() => this.CanSendMessage);
+        }
+        private async Task SendMessageExecuteAsync()
+        {
+            await this.BotService.SendMessageAsync(this.ConversationId, this.InputMessage);
+            this.InputMessage = "";
         }
 
         public void OnNavigatedFrom(NavigationParameters parameters)
         {
-
-        }
-
-        public void OnNavigatingTo(NavigationParameters parameters)
-        {
-
         }
 
         public void OnNavigatedTo(NavigationParameters parameters)
         {
-            if (parameters.ContainsKey("title"))
-                Title = (string)parameters["title"] + " and Prism";
+
+        }
+
+        public async void OnNavigatingTo(NavigationParameters parameters)
+        {
+            this.ConversationId = await this.BotService.StartConversationAsync();
         }
     }
 }
