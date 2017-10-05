@@ -10,6 +10,6 @@ namespace BotMobile.Services
     {
         Task<string> StartConversationAsync();
         Task SendMessageAsync(string conversationId, string message);
-        Task<IEnumerable<Activity>> GetMessageAsync(string conversationId, string watermark);
+        Task<(IEnumerable<Activity> messages, string watermark)> GetMessagesAsync(string conversationId, string watermark);
     }
 }

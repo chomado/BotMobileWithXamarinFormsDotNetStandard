@@ -22,6 +22,7 @@ namespace BotMobile
         {
             this.Container.RegisterTypeForNavigation<NavigationPage>();
             this.Container.RegisterTypeForNavigation<MainPage>();
+            this.Container.RegisterType<IDirectLineClient, DirectLineClient>();
             this.Container.RegisterType<IBotService, BotService>();
         }
     }

@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Bot.Connector.DirectLine;
 
 namespace BotMobile.Services
 {
-    class BotService : IBotService
+    public class BotService : IBotService
     {
         private static string BotUserName { get; } = "TSBot01";
+
         private IDirectLineClient DirectLineClient { get; }
 
         public BotService(IDirectLineClient directLineClient)
@@ -16,9 +17,12 @@ namespace BotMobile.Services
             this.DirectLineClient = directLineClient;
         }
 
-        public Task<IEnumerable<Activity>> GetMessageAsync(string conversationId, string watermark)
+        public async Task<(IEnumerable<Activity> messages, string watermark)> GetMessagesAsync(string conversationId, string watermark)
         {
-            throw new NotImplementedException();
+            var r = await this.DirectLineClient.Conversations.GetActivitiesAsync(
+                conversationId,
+                watermark);
+            return (r.Activities, r.Watermark);
         }
 
         public async Task SendMessageAsync(string conversationId, string message)
