@@ -3,6 +3,6 @@ namespace BotMobile.Consts
 {
     static class Secrets
     {
-        public static string DirectLineApiKey { get; } = "APIキー";
+        public static string DirectLineApiKey { get; } = "APIキー"; 
     }
 }
